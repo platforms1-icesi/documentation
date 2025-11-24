@@ -1,3 +1,7 @@
+# Diseño lógico del servidor SMTP
+
+Se decidió implementar particionamiento LVM específicamente en la máquina virtual SMTP debido a que acumula datos variables e impredecibles, tales como buzones de usuarios, colas de envío y registros masivos. A diferencia de servicios más estáticos como el DNS o DHCP, el servidor de correo corre un alto riesgo de saturar el almacenamiento rápidamente ante picos de tráfico, adjuntos grandes o ataques de spam; el uso de LVM permite aislar estos directorios volátiles (`/var` y `/var/log`) de la partición raíz (`/`), garantizando que un llenado total del espacio de correos no bloquee el sistema operativo ni impida el acceso administrativo, además de ofrecer la flexibilidad técnica de expandir el volumen en caliente si la organización crece, sin necesidad de detener el servicio.
+
 | Punto de Montaje | Sistema de Archivos | Tamaño Sugerido | Descripción                                                                                                                                              |
 |------------------|---------------------|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | /boot            | ext4                | 500 MB          | Archivos de arranque del kernel. Se separa para evitar corrupción.                                                                                                       |
