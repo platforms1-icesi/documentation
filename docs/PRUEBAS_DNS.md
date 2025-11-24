@@ -1,3 +1,5 @@
+# Tabla de Comandos de Validación DNS y DNSSEC
+
 | Entorno / Dispositivo                                   | Objetivo de la Prueba                                                                       | Comando Completo                                                              |
 | :------------------------------------------------------ | :------------------------------------------------------------------------------------------ | :---------------------------------------------------------------------------- |
 | **Servidor DNS (Linux)**<br>*(Desde SSH `dns-primary`)* | **1. Verificar Autoridad (SOA)**<br>Confirma que el servidor es el dueño de la zona.        | `dig @192.168.20.10 plataformas.local SOA`                                    |
