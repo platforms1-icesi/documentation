@@ -1,6 +1,6 @@
 # ANÁLISIS DE REQUERIMIENTOS
 
-**Curso:** Administración de Plataformas I  
+**Curso:** Plataformas I  
 **Universidad Icesi**  
 **Fecha:** Noviembre 2024
 

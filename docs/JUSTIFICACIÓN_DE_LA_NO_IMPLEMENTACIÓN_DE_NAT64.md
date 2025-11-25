@@ -1,6 +1,6 @@
 # INFORME TÉCNICO: JUSTIFICACIÓN DE LA NO IMPLEMENTACIÓN DE NAT64
 
-**Curso:** Administración de Plataformas I
+**Curso:** Plataformas I
 **Universidad Icesi**
 **Fecha:** Noviembre 2025
 

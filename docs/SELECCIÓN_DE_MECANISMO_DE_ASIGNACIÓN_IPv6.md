@@ -1,6 +1,6 @@
 # ANÁLISIS TÉCNICO: SELECCIÓN DE MECANISMO DE ASIGNACIÓN IPv6
 
-**Curso:** Administración de Plataformas I  
+**Curso:** Plataformas I  
 **Universidad Icesi**  
 **Fecha:** Noviembre 2025
 

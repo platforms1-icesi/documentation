@@ -1,0 +1,216 @@
+Main-Router#show running-config 
+Building configuration...
+
+
+Current configuration : 3438 bytes
+!
+! Last configuration change at 13:15:16 COT Tue Nov 25 2025 by admin
+! NVRAM config last updated at 13:15:20 COT Tue Nov 25 2025 by admin
+!
+version 15.5
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no platform punt-keepalive disable-kernel-core
+!
+hostname Main-Router
+!
+boot-start-marker
+boot-end-marker
+!
+!
+vrf definition Mgmt-intf
+ !
+ address-family ipv4
+ exit-address-family
+ !
+ address-family ipv6
+ exit-address-family
+!
+!
+no aaa new-model
+clock timezone COT -5 0
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+
+
+
+ip domain name plataformas.local
+!
+!
+!
+ipv6 unicast-routing
+!
+!
+!
+!
+!
+!        
+!
+subscriber templating
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+license udi pid ISR4321/K9 sn FDO22280TJX
+license boot level securityk9
+!
+spanning-tree extend system-id
+!
+username admin privilege 15 secret 5 $1$6NMN$UnFn7EYiXYuffOqWkCwJR1
+!
+redundancy
+ mode none
+!
+!
+!
+!
+!
+vlan internal allocation policy ascending
+!
+!
+!        
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback64
+ description Interfaz Dedicada NAT64
+ no ip address
+ ipv6 enable
+ nat64 enable
+!
+interface GigabitEthernet0/0/0
+ description Trunk to Switch
+ no ip address
+ negotiation auto
+!
+interface GigabitEthernet0/0/0.10
+ description VLAN 10 - Administracion
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+ ip nat inside
+ ipv6 address 2001:DB8:10::1/64
+ ipv6 enable
+ ipv6 nd ra dns server 2001:DB8:20::10
+ ipv6 nd ra dns server 2001:DB8:20::11
+ nat64 enable
+!
+interface GigabitEthernet0/0/0.20
+ description VLAN 20 - Servidores
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+ ip nat inside
+ ipv6 address 2001:DB8:20::1/64
+ ipv6 enable
+ ipv6 nd ra dns server 2001:DB8:20::10
+ ipv6 nd ra dns server 2001:DB8:20::11
+ nat64 enable
+!        
+interface GigabitEthernet0/0/0.30
+ description VLAN 30 - Clientes
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+ ip helper-address 192.168.20.50
+ ip nat inside
+ ipv6 address 2001:DB8:30::1/64
+ ipv6 enable
+ ipv6 nd ra dns server 2001:DB8:20::10
+ ipv6 nd ra dns server 2001:DB8:20::11
+ nat64 enable
+!
+interface GigabitEthernet0/0/1
+ description WAN - Internet
+ ip address dhcp
+ ip nat outside
+ negotiation auto
+ ipv6 enable
+ nat64 enable
+!
+interface Serial0/1/0
+ no ip address
+ shutdown
+!
+interface Serial0/1/1
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0
+ vrf forwarding Mgmt-intf
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface Vlan1
+ no ip address
+ shutdown
+!
+ip nat pool NAT64-WAN 192.168.130.30 192.168.130.30 prefix-length 24
+ip nat inside source list 100 interface GigabitEthernet0/0/1 overload
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+ip tftp source-interface GigabitEthernet0
+ip ssh time-out 60
+ip ssh version 2
+!
+!
+access-list 10 permit 192.168.10.0 0.0.0.255
+access-list 10 deny   any log
+access-list 100 permit ip 192.168.10.0 0.0.0.255 any
+access-list 100 permit ip 192.168.20.0 0.0.0.255 any
+access-list 100 permit ip 192.168.30.0 0.0.0.255 any
+ipv6 route 2001:DB8:64::/96 Loopback64
+!
+!
+!
+ipv6 access-list NAT64-ACL
+ permit ipv6 2001:DB8:20::/64 2001:DB8:64::/96
+ permit ipv6 2001:DB8:30::/64 2001:DB8:64::/96
+ permit ipv6 2001:DB8:10::/64 2001:DB8:64::/96
+!
+control-plane
+!
+!
+line con 0
+ login local
+ stopbits 1
+line aux 0
+ stopbits 1
+line vty 0 4
+ access-class 10 in
+ login local
+ transport input ssh
+!
+ntp server 192.168.20.30
+nat64 prefix stateful 2001:DB8:64::/96
+nat64 v6v4 list NAT64-ACL pool NAT64-WAN overload
+!
+end
+
+Main-Router# 
